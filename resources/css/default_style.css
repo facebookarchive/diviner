@@ -1,0 +1,232 @@
+html {
+  overflow-y: scroll;
+}
+
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, form, fieldset,
+p, blockquote, th, td, button {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset, img {
+  border: 0;
+}
+
+address, caption, cite, code, dfn, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+caption, th {
+  text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+body {
+  font: 13px/1.231 'lucida grande', tahoma, verdana, arial, sans-serif;
+  background:   #ACACAC;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: embed;
+  *font-size: small;
+}
+
+select, input, button, textarea, button {
+  font: 99% 'lucida grande', tahoma, verdana, arial, clean, sans-serif;
+}
+
+table {
+  font-size: inherit;
+  font: 100%;
+}
+
+h1, h2, h3, h4, h5 {
+  color: #333;
+  font-weight: bold;
+  padding-top: .5em;
+  padding-bottom: .25em;
+  margin-bottom: .25em;
+}
+
+h1 {
+  font-size: 32px;
+  border-bottom: 1px solid #cccccc;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #dddddd;
+}
+
+h3 {
+  font-size: 18px;
+  border-bottom: 1px solid #dddddd;
+}
+
+
+h4, h5 {
+  font-size: 11px;
+}
+
+a {
+  -moz-outline-style: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:visited {
+  color: #3b5998;
+}
+
+a:link {
+  color: #3b5998;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  display: block;
+}
+
+select {
+  border: 1px solid #bdc7d8;
+}
+
+
+.docs-head {
+  background: #3B5998;
+  font-size:  15px;
+  padding:    8px 12px 12px;
+  color:      #99AACC;
+}
+
+.docs-head a {
+  color:      #FFFFFF;
+}
+
+.docs-body {
+  background:       #ffffff;
+  border-bottom:    1px solid #888888;
+}
+
+div.doc {
+  position:       relative;
+  font-size:      13px;
+  line-height:    1.6em;
+  padding:        0.5em 2em 4em 4em;
+  color:          #111111;
+}
+
+div.atom-doc {
+  width: 60em;
+}
+  
+
+.atom-index ul {
+  margin-left: 2em;
+}
+
+ul.atom-index {
+  margin-bottom: 2em;
+}
+
+.atom-excerpt {
+  color: #666666;
+}
+
+a.atom-symbol {
+  font-weight: bold;
+}
+
+.doc-markup p {
+  margin: 1em 0;
+}
+
+.doc-markup code {
+  background: #fdfae7;
+  border: 1px solid #f5e178;
+  display: block;
+  white-space: pre;
+  font-family: "Monaco", monospace;
+  font-size: 10px;
+  color: #000000;
+  margin: 1em 2em;
+  padding: .5em 1.5em;
+}
+
+.doc-markup ul {
+  list-style: disc;
+  margin: 1em 0 1em 3em;
+}
+
+.atom-type {
+  float: right;
+  color: #888888;
+  font-weight: normal;
+}
+
+.atom-attributes {
+  color: #888888;
+  font-weight: normal;
+}
+
+.atom-return-type {
+  color: #888888;
+  font-weight: normal;
+}  
+
+.atom-parameters {
+  color: #444444;
+  font-weight: normal;
+}
+  
+
+table.atom-info {
+  border: 1px solid #aaaaaa;
+  background: #efefef;
+  margin: .5em 3% 1em;
+  width: 94%;
+}
+
+table.atom-info th {
+  background: #dfdfdf;
+  padding: 4px 12px 4px 8px;
+  text-align: right;
+  font-weight: bold;
+  width: 25%;
+  white-space: nowrap;
+}
+
+table.atom-info td {
+  padding: 4px 8px;
+  color: #666666;
+}
+
+.atom-undocumented {
+  padding: .5em 1em;
+  font-style: italic;
+  color: #cc6666;
+}
+
+.docs-diviner-mark {
+  float: right;
+}
