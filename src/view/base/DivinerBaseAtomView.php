@@ -85,12 +85,7 @@ abstract class DivinerBaseAtomView {
     $atom = $this->getAtom();
     $renderer = $this->getRenderer();
 
-    $type = phutil_render_tag(
-      'span',
-      array(
-        'class' => 'atom-type',
-      ),
-      phutil_escape_html($renderer->getTypeDisplayName($atom->getType())));
+    $type = $renderer->renderType($atom->getType());
 
     $name = phutil_escape_html($atom->getName());
 

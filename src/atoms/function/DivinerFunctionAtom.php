@@ -21,6 +21,9 @@
  */
 class DivinerFunctionAtom extends DivinerAtom {
 
+  private $returnType = 'wild';
+  private $parameters = array();
+
   public function getType() {
     return self::TYPE_FUNCTION;
   }
@@ -32,5 +35,24 @@ class DivinerFunctionAtom extends DivinerAtom {
   public function getChildren() {
     return array();
   }
+
+  public function setReturnType($return_type) {
+    $this->returnType = $return_type;
+    return $this;
+  }
+
+  public function getReturnType() {
+    return $this->returnType;
+  }
+
+  public function getParameters() {
+    return $this->parameters;
+  }
+
+  public function addParameter($name, $attributes = array()) {
+    $this->parameters[$name] = $attributes;
+    return $this;
+  }
+
 
 }

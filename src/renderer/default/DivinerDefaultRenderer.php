@@ -227,4 +227,13 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $link_text);
   }
 
+  public function renderType($type) {
+    return phutil_render_tag(
+      'span',
+      array(
+        'class' => 'atom-type',
+      ),
+      phutil_escape_html($this->getTypeDisplayName($type)));
+  }
+
 }

@@ -72,6 +72,12 @@ class DivinerXHPEngine extends DivinerEngine {
 
       $this->findAtomDocblock($atom, $func);
 
+      $params = $func
+        ->getChildByIndex(3)
+        ->selectDescendantsOfType('n_DECLARATION_PARAMETER');
+      $this->parseParams($atom, $params);
+      $this->parseReturnType($atom, $func);
+
       $atoms[] = $atom;
     }
 
@@ -95,6 +101,7 @@ class DivinerXHPEngine extends DivinerEngine {
       $methods = $class_decl->selectDescendantsOfType('n_METHOD_DECLARATION');
       foreach ($methods as $method) {
         $matom = new DivinerMethodAtom();
+        $this->findAtomDocblock($matom, $method);
 
         $attribute_list = $method->getChildByIndex(0);
         $attributes = $attribute_list->selectDescendantsOfType('n_STRING');
@@ -109,34 +116,13 @@ class DivinerXHPEngine extends DivinerEngine {
         $params = $method
           ->getChildByIndex(3)
           ->selectDescendantsOfType('n_DECLARATION_PARAMETER');
-        foreach ($params as $param) {
-          $name = $param->getChildByIndex(1);
-          $dict = array(
-            'type'    => $param->getChildByIndex(0)->getConcreteString(),
-            'default' => $param->getChildByIndex(2)->getConcreteString(),
-          );
-          $matom->addParameter($name->getConcreteString(), $dict);
-        }
+        $this->parseParams($matom, $params);
 
         $matom->setName($method->getChildByIndex(2)->getConcreteString());
         $matom->setFile($file);
         $matom->setLine(1);
-        $this->findAtomDocblock($matom, $method);
 
-        $metadata = $matom->getDocblockMetadata();
-        $return = idx($metadata, 'return');
-        if ($return === null) {
-          $return = idx($metadata, 'returns');
-        }
-        if ($return) {
-          $type = reset(preg_split('/\s+/', trim($return)));
-
-          if ($method->getChildByIndex(1)->getTypeName() == 'n_REFERENCE') {
-            $type = $type.' &';
-          }
-
-          $matom->setReturnType($type);
-        }
+        $this->parseReturnType($matom, $method);
         $atom->addMethod($matom);
       }
 
@@ -163,5 +149,34 @@ class DivinerXHPEngine extends DivinerEngine {
       return false;
     }
   }
+
+  private function parseParams(DivinerAtom $atom, XHPASTNodeList $params) {
+    foreach ($params as $param) {
+      $name = $param->getChildByIndex(1);
+      $dict = array(
+        'type'    => $param->getChildByIndex(0)->getConcreteString(),
+        'default' => $param->getChildByIndex(2)->getConcreteString(),
+      );
+      $atom->addParameter($name->getConcreteString(), $dict);
+    }
+  }
+
+  private function parseReturnType(DivinerAtom $atom, XHPASTNode $decl) {
+    $metadata = $atom->getDocblockMetadata();
+    $return = idx($metadata, 'return');
+    if ($return === null) {
+      $return = idx($metadata, 'returns');
+    }
+    if ($return) {
+      $type = reset(preg_split('/\s+/', trim($return)));
+
+      if ($decl->getChildByIndex(1)->getTypeName() == 'n_REFERENCE') {
+        $type = $type.' &';
+      }
+
+      $atom->setReturnType($type);
+    }
+  }
+
 
 }

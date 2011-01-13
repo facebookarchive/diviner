@@ -74,7 +74,9 @@ foreach ($engines as $engine) {
       Filesystem::resolvePath($file, $root));
   }
 
-  echo "Generating documentation for ".count($file_map)." files...\n";
+  $n = number_format(count($file_map));
+  $engine_name = get_class($engine);
+  echo "[{$engine_name}] Generating documentation for {$n} files...";
 
   $engine->willParseFiles($file_map);
 
@@ -89,6 +91,7 @@ foreach ($engines as $engine) {
       $publisher->addAtoms($atoms);
     }
   }
+  echo "\n";
 }
 
 $publisher->publish();
