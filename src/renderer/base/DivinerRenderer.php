@@ -18,5 +18,16 @@
 
 abstract class DivinerRenderer {
 
+  private $projectConfiguration;
+
+  public function setProjectConfiguration(
+    DivinerProjectConfiguration $project_configuration) {
+    $this->projectConfiguration = $project_configuration;
+    return $this;
+  }
+
+  public function getProjectConfiguration() {
+    return $this->projectConfiguration;
+  }
 
 }

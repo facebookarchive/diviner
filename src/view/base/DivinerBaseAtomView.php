@@ -93,10 +93,19 @@ abstract class DivinerBaseAtomView {
   }
 
   protected function getAtomInfoDictionary() {
+    $renderer = $this->getRenderer();
     $atom = $this->getAtom();
-    return array(
-      'Defined' => $atom->getFile().':'.$atom->getLine(),
-    );
+    $dict = array();
+    $dict['Defined'] = $renderer->renderFileAndLine(
+      $atom->getFile(),
+      $atom->getLine());
+    $metadata = $atom->getDocblockMetadata();
+    $group = idx($metadata, 'group');
+    if ($group) {
+      $dict['Group'] = $renderer->renderGroup($group);
+    }
+    
+    return $dict;
   }
 
 }

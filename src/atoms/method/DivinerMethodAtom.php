@@ -21,7 +21,7 @@
  */
 class DivinerMethodAtom extends DivinerAtom {
 
-  private $returnType = 'wild';
+  private $returnTypeAttributes = array();
   private $parameters = array();
 
   public function getType() {
@@ -51,13 +51,13 @@ class DivinerMethodAtom extends DivinerAtom {
     return array_keys($attributes);
   }
 
-  public function setReturnType($return_type) {
-    $this->returnType = $return_type;
+  public function setReturnTypeAttributes(array $dict) {
+    $this->returnTypeAttributes = $dict;
     return $this;
   }
 
-  public function getReturnType() {
-    return $this->returnType;
+  public function getReturnTypeAttributes() {
+    return $this->returnTypeAttributes;
   }
 
   public function getParameters() {

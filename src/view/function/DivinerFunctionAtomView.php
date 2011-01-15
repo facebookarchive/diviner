@@ -25,7 +25,8 @@ class DivinerFunctionAtomView extends DivinerBaseAtomView {
     $renderer = $this->getRenderer();
 
     $attributes = $renderer->renderAttributes($atom->getAttributes());
-    $return = $renderer->renderReturnType($atom->getReturnType());
+    $return = $renderer->renderReturnTypeAttributes(
+      $atom->getReturnTypeAttributes());
     $params = $renderer->renderParameters($atom->getParameters());
     return
       '<h3>'.
@@ -33,6 +34,9 @@ class DivinerFunctionAtomView extends DivinerBaseAtomView {
       $return.' '.
       phutil_escape_html($atom->getName()).'('.$params.')'.
       '</h3>'.
+      $renderer->renderParameterTable(
+        $atom->getParameters(),
+        $atom->getReturnTypeAttributes()).
       $renderer->markupText($atom->getDocblockText());
   }
 

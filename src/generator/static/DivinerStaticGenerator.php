@@ -23,6 +23,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
     $renderer = new DivinerDefaultRenderer();
     $this->setRenderer($renderer);
     $configuration = $this->getProjectConfiguration();
+    $renderer->setProjectConfiguration($configuration);
 
     $root = $configuration->getProjectRoot().'/docs/';
     $name = $configuration->getProjectName();
@@ -50,58 +51,35 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
 
     $groups = array();
     foreach ($views as $view) {
-      $groups[$view->getAtom()->getType()][] = $view;
+      $meta = $view->getAtom()->getDocblockMetadata();
+      $group = idx($meta, 'group', 'radicals');
+      $groups[$group][] = $view;
     }
-
-    // Reorder the types.
-    $groups = array_select_keys($groups, array('article')) + $groups;
-
+    // Force radicals to the end.
+    if (!empty($groups['radicals'])) {
+      $radicals = $groups['radicals'];
+      unset($groups['radicals']);
+      $groups['radicals'] = $radicals;
+    }
+    
+    $groups = array_select_keys(
+      $groups,
+      array_keys($configuration->getConfig('groups', array()))) + $groups;
+    
     $renderer->setBaseURI('');
-
     $index = array();
-    foreach ($groups as $type => $views) {
-
-      $ordered = array();
-      foreach ($views as $view) {
-        $ordered[$view->getAtom()->getName()] = $view;
-      }
-      ksort($ordered);
-      $views = array_values($ordered);
-
-      $index[] = phutil_render_tag(
-        'h1',
+    $index[] = $this->renderTableOfContents($groups);
+    foreach ($groups as $name => $group) {
+      $anchor = phutil_render_tag(
+        'a',
         array(
+          'name' => $renderer->getNormalizedName($name),
         ),
-        $this->renderTypeDisplayName($type));
-      if ($type == 'class') {
-        $map = array(-1 => array());
-        foreach ($views as $view) {
-          $atom = $view->getAtom();
-          $extends = $atom->getParentClasses();
-          if (!$extends) {
-            $extends = array(-1);
-          }
-          foreach ($extends as $parent) {
-            $map[$parent][] = $view;
-          }
-        }
-        $list = $this->renderClassHierarchy($map, $map[-1]);
-      } else {
-        $list = array();
-        foreach ($views as $view) {
-          $excerpt = $this->renderExcerpt($view);
-          $list[] = phutil_render_tag(
-            'li',
-            array(),
-            $renderer->renderAtomLink($view->getAtom()).$excerpt);
-        }
-      }
-      $index[] = phutil_render_tag(
-        'ul',
-        array(
-          'class' => 'atom-index',
-        ),
-        implode("\n", $list));
+        '');
+      $index[] = '<div class="atom-group-listing">';
+      $index[] = '<h1>'.$anchor.$renderer->renderGroup($name).'</h1>';
+      $index[] = $this->renderGroup($group);
+      $index[] = '</div>';
     }
 
     Filesystem::writeFile(
@@ -131,7 +109,109 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
         Filesystem::readFile($stylesheet));
     }
   }
+  
+  private function renderTableOfContents($groups) {
+    $renderer = $this->getRenderer();
+    
+    $out = array();
+    foreach ($groups as $name => $group) {
+      $link = phutil_render_tag(
+        'a',
+        array(
+          'href' => '#'.$renderer->getNormalizedName($name),
+        ),
+        $renderer->renderGroup($name));
+      $out[] = '<li>'.$link.'</li>';
+    }
+    
+    return
+      '<div class="atom-toc">'.
+        '<h1>Table of Contents</h1>'.
+        '<ul>'.implode("\n", $out).'</ul>'.
+      '</div>';
+    
+  }
+  
+  private function renderGroup($group) {
+    $renderer = $this->getRenderer();
 
+    $types = array();
+    foreach ($group as $view) {
+      $types[$view->getAtom()->getType()][] = $view;
+    }
+    
+    // Reorder the types.
+    $types = array_select_keys(
+      $types,
+      array('article', 'class', 'function')) + $types;
+
+    $index = array();
+    foreach ($types as $type => $views) {
+      $ordered = array();
+      foreach ($views as $view) {
+        $ordered[$view->getAtom()->getName()] = $view;
+      }
+      ksort($ordered);
+      $views = array_values($ordered);
+
+      if ($type != 'article') {
+        $index[] = phutil_render_tag(
+          'h3',
+          array(
+          ),
+          $this->renderTypeDisplayName($type));
+      }
+      if ($type == 'class') {
+        $map = array(-1 => array());
+        
+        $local = array();
+        foreach ($views as $view) {
+          $atom = $view->getAtom();
+          $local[$atom->getName()] = true;
+        }
+        
+        foreach ($views as $view) {
+          $atom = $view->getAtom();
+          $extends = $atom->getParentClasses();
+          $hit = false;
+          foreach ($extends as $parent) {
+            if (isset($local[$parent])) {
+              $hit = true;
+              break;
+            }
+          }
+          if (!$hit) {
+            $extends = array(-1);
+          }
+          foreach ($extends as $parent) {
+            $map[$parent][] = $view;
+          }
+        }
+        $list = $this->renderClassHierarchy($map, $map[-1]);
+      } else {
+        $list = array();
+        foreach ($views as $view) {
+          $excerpt = $this->renderExcerpt($view);
+          $list[] = phutil_render_tag(
+            'li',
+            array(),
+            $renderer->renderAtomLink($view->getAtom()).$excerpt);
+        }
+      }
+      $index[] = phutil_render_tag(
+        'ul',
+        array(
+          'class' => 'atom-index',
+        ),
+        implode("\n", $list));
+    }
+    
+    return
+      '<div class="atom-group-contents">'.
+        implode("\n", $index).
+      '</div>';
+  }  
+  
   private function renderView(DivinerBaseAtomView $view) {
 
     $html = $view->renderView();

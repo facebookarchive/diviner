@@ -67,7 +67,7 @@ class DivinerXHPEngine extends DivinerEngine {
 
       $atom = new DivinerFunctionAtom();
       $atom->setName($name->getConcreteString());
-      $atom->setLine(1);
+      $atom->setLine($func->getLineNumber());
       $atom->setFile($file);
 
       $this->findAtomDocblock($atom, $func);
@@ -87,7 +87,7 @@ class DivinerXHPEngine extends DivinerEngine {
 
       $atom = new DivinerClassAtom();
       $atom->setName($name->getConcreteString());
-      $atom->setLine(1);
+      $atom->setLine($class->getLineNumber());
       $atom->setFile($file);
 
       $extends = $class->getChildByIndex(2);
@@ -120,7 +120,7 @@ class DivinerXHPEngine extends DivinerEngine {
 
         $matom->setName($method->getChildByIndex(2)->getConcreteString());
         $matom->setFile($file);
-        $matom->setLine(1);
+        $matom->setLine($method->getLineNumber());
 
         $this->parseReturnType($matom, $method);
         $atom->addMethod($matom);
@@ -151,12 +151,30 @@ class DivinerXHPEngine extends DivinerEngine {
   }
 
   private function parseParams(DivinerAtom $atom, XHPASTNodeList $params) {
+    $metadata = $atom->getDocblockMetadata();
+    $docs = idx($metadata, 'param', '');
+    if ($docs) {
+      $docs = explode("\n", $docs);
+    }
+
     foreach ($params as $param) {
       $name = $param->getChildByIndex(1);
       $dict = array(
         'type'    => $param->getChildByIndex(0)->getConcreteString(),
         'default' => $param->getChildByIndex(2)->getConcreteString(),
       );
+      if ($docs) {
+        $doc = array_shift($docs);
+        if ($doc) {
+          $split = preg_split('/\s+/', trim($doc), $limit = 2);
+          if (!empty($split[0])) {
+            $dict['doctype'] = $split[0];
+          }
+          if (!empty($split[1])) {
+            $dict['docs'] = $split[1];
+          }
+        }
+      }
       $atom->addParameter($name->getConcreteString(), $dict);
     }
   }
@@ -164,17 +182,29 @@ class DivinerXHPEngine extends DivinerEngine {
   private function parseReturnType(DivinerAtom $atom, XHPASTNode $decl) {
     $metadata = $atom->getDocblockMetadata();
     $return = idx($metadata, 'return');
-    if ($return === null) {
-      $return = idx($metadata, 'returns');
-    }
     if ($return) {
-      $type = reset(preg_split('/\s+/', trim($return)));
+      $split = preg_split('/\s+/', trim($return), $limit = 2);
+      if (!empty($split[0])) {
+        $type = $split[0];
+      } else {
+        $type = 'wild';
+      }
 
       if ($decl->getChildByIndex(1)->getTypeName() == 'n_REFERENCE') {
         $type = $type.' &';
       }
+        
+      $docs = null;
+      if (!empty($split[1])) {
+        $docs = $split[1];
+      }
+      
+      $dict = array(
+        'doctype' => $type,
+        'docs'    => $docs,
+      );
 
-      $atom->setReturnType($type);
+      $atom->setReturnTypeAttributes($dict);
     }
   }
 

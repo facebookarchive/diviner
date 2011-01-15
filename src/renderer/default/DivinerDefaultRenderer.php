@@ -78,7 +78,10 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       '</span>';
   }
 
-  public function renderReturnType($type) {
+  public function renderReturnTypeAttributes(array $attributes) {
+    $type = nonempty(
+      idx($attributes, 'type'),
+      idx($attributes, 'doctype'));
     return phutil_render_tag(
       'span',
       array(
@@ -201,12 +204,64 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $rule->setRenderer($this);
     return $rule;
   }
+  
+  public function renderAtomAnchor(DivinerAtom $atom) {
+    $suffix = '';
+    switch ($atom->getType()) {
+      case 'method':
+      case 'function':
+        $suffix = '()';
+        break;
+    }
+    
+    $type = $atom->getType();
+    $name = $atom->getName();
+    
+    $type = $this->getNormalizedName($type);
+    $name = $this->getNormalizedName($name);
+    $anchor_name = $type.'/'.$name;
+    $link_text = phutil_escape_html($atom->getName().$suffix);
+    
+    return phutil_render_tag(
+      'a',
+      array(
+        'href'  => '#'.$anchor_name,
+        'class' => 'atom-symbol',
+      ),
+      $link_text);
+  }
 
   public function renderAtomLink(DivinerAtom $atom) {
+    $suffix = '';
+    switch ($atom->getType()) {
+      case 'method':
+      case 'function':
+        $suffix = '()';
+        break;
+    }
+    
     return $this->renderAtomLinkRaw(
       $atom->getType(),
-      $atom->getName());
+      $atom->getName(),
+      phutil_escape_html($atom->getName().$suffix));
   }
+  
+  public function renderAtomAnchorTarget(DivinerAtom $atom) {
+    $type = $atom->getType();
+    $name = $atom->getName();
+    
+    $type = $this->getNormalizedName($type);
+    $name = $this->getNormalizedName($name);
+    $anchor_name = $type.'/'.$name;
+    
+    return phutil_render_tag(
+      'a',
+      array(
+        'name' => $anchor_name,
+      ),
+      '');
+  }
+  
 
   public function renderAtomLinkRaw($type, $name, $link_text = null) {
     if ($link_text === null) {
@@ -234,6 +289,73 @@ class DivinerDefaultRenderer extends DivinerRenderer {
         'class' => 'atom-type',
       ),
       phutil_escape_html($this->getTypeDisplayName($type)));
+  }
+  
+  public function renderParameterTable(array $params, array $return) {
+    $table = array();
+
+    $param_header = 'parameters';
+    foreach ($params as $param => $details) {
+      $type = nonempty(
+        idx($details, 'doctype'),
+        idx($details, 'type'),
+        'wild');
+      $docs = idx($details, 'docs');
+      $table[] =
+        '<tr>'.
+          '<td class="atom-param-table-group">'.$param_header.'</td>'.
+          '<td class="atom-param-type">'.phutil_escape_html($type).'</td>'.
+          '<td class="atom-param-name">'.phutil_escape_html($param).'</td>'.
+          '<td>'.$this->markupTextInline($docs).'</td>'.
+        '</tr>';
+      $param_header = null;
+    }
+    
+    $type = nonempty(
+      idx($return, 'doctype'),
+      idx($return, 'type'),
+      'wild');
+      
+    $docs = idx($return, 'docs');
+
+    $table[] =
+        '<tr class="atom-param-table-return">'.
+          '<td class="atom-param-table-group">return</td>'.
+          '<td class="atom-param-type">'.phutil_escape_html($type).'</td>'.
+          '<td class="atom-param-name"></td>'.
+          '<td>'.$this->markupTextInline($docs).'</td>'.
+        '</tr>';
+
+    return
+      '<table class="atom-param-table">'.
+        implode("\n", $table).
+       '</table>';
+  }
+  
+  public function renderGroup($group) {
+    $map = $this->getProjectConfiguration()->getConfig('groups', array());
+    $map = $map + array(
+      'radicals' => 'Free Radicals',
+    );
+    $name = idx($map, $group, $group);
+    $name = phutil_escape_html($name);
+    return '<span class="atom-group">'.$name.'</span>';
+  }
+  
+  public function renderFileAndLine($file, $line) {
+    
+    $src_base = $this->getProjectConfiguration()->getConfig('src_base');
+    if (!$src_base) {
+      return phutil_escape_html($file.':'.$line);
+    }
+    
+    return phutil_render_tag(
+      'a',
+      array(
+        'href'    => $src_base.'/'.$file.'#L'.$line,
+        'target'  => 'blank',
+      ),
+      phutil_escape_html($file.':'.$line));
   }
 
 }

@@ -12,6 +12,10 @@ p, blockquote, th, td, button {
   border: 0;
 }
 
+html {
+  padding-bottom: 16em;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -32,6 +36,10 @@ ol, ul {
 
 caption, th {
   text-align: left;
+}
+
+td, th {
+  vertical-align: top;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -57,12 +65,13 @@ table {
   font: 100%;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
   color: #333;
   font-weight: bold;
   padding-top: .5em;
   padding-bottom: .25em;
   margin-bottom: .25em;
+  line-height:    1.6em;
 }
 
 h1 {
@@ -80,10 +89,19 @@ h3 {
   border-bottom: 1px solid #dddddd;
 }
 
-
-h4, h5 {
-  font-size: 11px;
+h4 {
+  font-size: 16px;
 }
+
+.atom-task-list {
+  padding: 0em 1em;
+}
+
+.atom-task-list ul {
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
 
 a {
   -moz-outline-style: none;
@@ -173,6 +191,11 @@ a.atom-symbol {
   padding: .5em 1.5em;
 }
 
+.doc-markup code.remarkup-counterexample {
+  border: 1px solid #aa0000;
+  background-color: #ffaaaa;
+}
+
 .doc-markup ul {
   list-style: disc;
   margin: 1em 0 1em 3em;
@@ -229,4 +252,67 @@ table.atom-info td {
 
 .docs-diviner-mark {
   float: right;
+}
+
+.atom-param-table {
+  margin: .75em 3% 1em;
+  width: 94%;
+  background: #f6fff3;
+  border: 1px solid #88aa66;
+}
+
+.atom-param-table .atom-param-table-return {
+  background: #e0ffd0;
+}
+
+.atom-param-table td {
+  padding: 2px 4px;
+}
+
+.atom-param-table .atom-param-table-group {
+  text-align: right;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 15%;
+  color: #7cab4f;
+}
+
+.atom-param-table .atom-param-type {
+  white-space: nowrap;
+  width: 12%;
+  text-align: right;
+}
+
+.atom-param-table .atom-param-name {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.atom-group-contents h3 {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.atom-group-contents ul {
+  margin-left: 1em;
+}
+
+.atom-group-listing {
+  background: #f3f3f3;
+  margin: 1em 0 2em 0;
+  padding: .5em 2em;
+  border: solid #555555;
+  border-width: 1px 0px 0px;
+}
+
+.atom-group-listing h1 {
+  margin: 0 0 .25em 0;
+  padding: 0;
+}
+
+.atom-toc ul {
+  margin: 1em 2em 4em;
+  font-weight: bold;
+  font-size: 14px;
 }
