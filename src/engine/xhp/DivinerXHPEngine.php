@@ -48,7 +48,7 @@ class DivinerXHPEngine extends DivinerEngine {
       $futures[$file] = xhpast_get_parser_future($data);
     }
 
-    foreach (Futures($futures) as $file => $future) {
+    foreach (Futures($futures)->limit(8) as $file => $future) {
       $this->trees[$file] = XHPASTTree::newFromDataAndResolvedExecFuture(
         $file_map[$file],
         $future->resolve());
