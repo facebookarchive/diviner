@@ -53,7 +53,7 @@ class DivinerArticleEngine extends DivinerEngine {
     $data = "/**\n".str_replace("\n", "\n * ", $data)."\n */";
     $atom->setRawDocblock($data);
 
-    $parser = new DivinerDocblockParser();
+    $parser = new PhutilDocblockParser();
     list($text, $meta) = $parser->parse($data);
 
     $name = idx($meta, 'title', 'Untitled Article "'.basename($file).'"');

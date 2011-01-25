@@ -8,10 +8,10 @@
 
 phutil_require_module('diviner', 'atoms/article');
 phutil_require_module('diviner', 'engine/base');
-phutil_require_module('diviner', 'parser/docblock');
 
 phutil_require_module('phutil', 'filesystem');
 phutil_require_module('phutil', 'filesystem/filefinder');
+phutil_require_module('phutil', 'parser/docblock');
 phutil_require_module('phutil', 'utils');
 
 

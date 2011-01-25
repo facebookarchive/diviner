@@ -6,7 +6,7 @@
 
 
 
-phutil_require_module('diviner', 'parser/docblock');
+phutil_require_module('phutil', 'parser/docblock');
 
 
 phutil_require_source('DivinerAtom.php');

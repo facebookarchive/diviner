@@ -65,7 +65,7 @@ abstract class DivinerAtom {
   }
 
   private function parseDocblock() {
-    $parser = new DivinerDocblockParser();
+    $parser = new PhutilDocblockParser();
     list($text, $meta) = $parser->parse($this->getRawDocblock());
     $this->docblockText = $text;
     $this->docblockMetadata = $meta;
