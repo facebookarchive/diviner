@@ -19,6 +19,8 @@
 
 require_once dirname(__FILE__).'/__init_script__.php';
 
+ini_set('memory_limit', -1);
+
 $args = array_slice($argv, 1);
 
 $full_rebuild = false;
@@ -70,9 +72,14 @@ foreach ($engines as $engine) {
 
   $file_map = array();
   foreach ($files as $file => $hash) {
+    if (preg_match('/^externals/', $file)) {
+      continue;
+    }
+    
     $file_map[$file] = Filesystem::readFile(
       Filesystem::resolvePath($file, $root));
   }
+  
 
   $n = number_format(count($file_map));
   $engine_name = get_class($engine);
