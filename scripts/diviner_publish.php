@@ -28,6 +28,7 @@ $update_remote = false;
 $trace = false;
 
 phutil_require_module('phutil', 'future/exec');
+phutil_require_module('phutil', 'symbols');
 
 $args = array_values($args);
 $alen = count($args);
@@ -62,24 +63,38 @@ phutil_require_module('diviner', 'publisher');
 $configuration = DivinerProjectConfiguration::newFromDirectory($args[0]);
 $root = Filesystem::resolvePath($args[0]);
 
+foreach ($configuration->getConfig('phutil_libraries', array()) as $library) {
+  if (Filesystem::pathExists($root.'/'.$library)) {
+    phutil_load_library($root.'/'.$library);
+  } else {
+    phutil_load_library($library);
+  }
+}
+
 $publisher = new DivinerPublisher($configuration);
 
 $all_atoms = array();
 
 $engines = $configuration->buildEngines();
+
+if (!$engines) {
+  throw new Exception(
+    "No documentation engines are specified in your .divinerconfig.");
+}
+
 foreach ($engines as $engine) {
   $files = $engine->buildFileContentHashes();
 
   $file_map = array();
   foreach ($files as $file => $hash) {
-    if (preg_match('/^externals/', $file)) {
+    if (preg_match('@^(externals|scripts)/@', $file)) {
       continue;
     }
-    
+
     $file_map[$file] = Filesystem::readFile(
       Filesystem::resolvePath($file, $root));
   }
-  
+
 
   $n = number_format(count($file_map));
   $engine_name = get_class($engine);

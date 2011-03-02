@@ -63,10 +63,14 @@ final class DivinerProjectConfiguration {
   }
 
   public function buildEngines() {
-    return array(
-      new DivinerXHPEngine($this),
-      new DivinerArticleEngine($this),
-    );
+    $engines = array();
+    foreach ($this->getConfig('engines', array()) as $engine_config) {
+      list($class, $config) = $engine_config;
+      PhutilSymbolLoader::loadClass($class);
+      $object = newv($class, array($this, $config));
+      $engines[] = $object;
+    }
+    return $engines;
   }
 
 }

@@ -6,10 +6,8 @@
 
 
 
-phutil_require_module('diviner', 'engine/article');
-phutil_require_module('diviner', 'engine/xhp');
-
 phutil_require_module('phutil', 'filesystem');
+phutil_require_module('phutil', 'symbols');
 phutil_require_module('phutil', 'utils');
 
 

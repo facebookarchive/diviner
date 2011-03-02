@@ -22,9 +22,13 @@
 abstract class DivinerEngine {
 
   private $configuration;
+  private $engineConfig;
 
-  final public function __construct(DivinerProjectConfiguration $config) {
+  final public function __construct(
+    DivinerProjectConfiguration $config,
+    array $engine_config) {
     $this->configuration = $config;
+    $this->engineConfig = $engine_config;
   }
 
   abstract public function buildFileContentHashes();
@@ -33,6 +37,10 @@ abstract class DivinerEngine {
 
   final public function getConfiguration() {
     return $this->configuration;
+  }
+
+  final public function getEngineConfiguration($key, $default = null) {
+    return idx($this->engineConfig, $key, $default);
   }
 
 }
