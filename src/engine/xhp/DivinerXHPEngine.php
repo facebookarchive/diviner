@@ -136,6 +136,9 @@ class DivinerXHPEngine extends DivinerEngine {
       $file_atom->addChild($atom);
     }
 
+    $this->trees[$file]->dispose();
+    unset($this->trees[$file]);
+
     return array($file_atom);
   }
 
@@ -193,12 +196,12 @@ class DivinerXHPEngine extends DivinerEngine {
       if ($decl->getChildByIndex(1)->getTypeName() == 'n_REFERENCE') {
         $type = $type.' &';
       }
-        
+
       $docs = null;
       if (!empty($split[1])) {
         $docs = $split[1];
       }
-      
+
       $dict = array(
         'doctype' => $type,
         'docs'    => $docs,

@@ -82,38 +82,73 @@ if (!$engines) {
     "No documentation engines are specified in your .divinerconfig.");
 }
 
+execx('mkdir -p %s', $root.'/.divinercache');
+
 foreach ($engines as $engine) {
+  $engine_name = get_class($engine);
+
   $files = $engine->buildFileContentHashes();
 
   $file_map = array();
+  $cache_loc = array();
+  $skipped = 0;
   foreach ($files as $file => $hash) {
+    // Include the file path in the hash.
+    $files[$file] = md5($file.$hash);
+
     if (preg_match('@^(externals|scripts)/@', $file)) {
+      $skipped++;
       continue;
+    }
+
+    $cache_loc[$file] =
+      $root.'/.divinercache/'.
+      $files[$file].'.'.
+      $engine_name;
+
+    if (Filesystem::pathExists($cache_loc[$file])) {
+      $data = Filesystem::readFile($cache_loc[$file]);
+      $atoms = unserialize($data);
+      if ($atoms) {
+        $publisher->addAtoms($atoms);
+        continue;
+      }
     }
 
     $file_map[$file] = Filesystem::readFile(
       Filesystem::resolvePath($file, $root));
   }
 
+  $n = number_format(count($files) - count($file_map) - $skipped);
+  echo "[{$engine_name}] Found {$n} files in cache...\n";
 
   $n = number_format(count($file_map));
-  $engine_name = get_class($engine);
-  echo "[{$engine_name}] Generating documentation for {$n} files...";
+  echo "[{$engine_name}] Parsing documentation for {$n} files...";
 
-  $engine->willParseFiles($file_map);
+  foreach (array_chunk($file_map, 32, true) as $file_map_chunk) {
+    $engine->willParseFiles($file_map_chunk);
 
-  foreach ($file_map as $file => $data) {
-    if (strpos($data, '@undivinable') !== false) {
-      $atom = new DivinerFileAtom();
-      $atom->setName($file);
-      $atom->setFile($file);
-      $publisher->addAtoms(array($atom));
-    } else {
-      $atoms = $engine->parseFile($file, $data);
-      $publisher->addAtoms($atoms);
+    foreach ($file_map_chunk as $file => $data) {
+      if (strpos($data, '@undivinable') !== false) {
+        $atom = new DivinerFileAtom();
+        $atom->setName($file);
+        $atom->setFile($file);
+        $publisher->addAtoms(array($atom));
+      } else {
+        $atoms = $engine->parseFile($file, $data);
+
+        Filesystem::writeFile($cache_loc[$file], serialize($atoms));
+
+        $publisher->addAtoms($atoms);
+      }
     }
+    echo ".";
   }
   echo "\n";
 }
 
+echo "Publishing documentation...\n";
+
 $publisher->publish();
+
+echo "Done.\n";
