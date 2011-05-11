@@ -42,6 +42,24 @@ class DivinerRemarkupRuleSymbols
     $name = $matches[2];
 
     switch ($type) {
+      case 'method':
+        $context = $this->getEngine()->getConfig('diviner.context');
+        if (strpos($name, '::') !== false) {
+          list($class, $method) = explode('::', $name);
+        } else if ($context) {
+          $method = $name;
+          $class = $context->getName();
+        } else {
+          return $matches[0];
+        }
+        $suffix = '()';
+        $type = 'class';
+        return $this->getEngine()->storeText(
+          $this->getRenderer()->renderAtomLinkRaw(
+            $type,
+            $class,
+            phutil_escape_html($name).$suffix,
+            'method/'.$method));
       case 'function':
         $suffix = '()';
         break;

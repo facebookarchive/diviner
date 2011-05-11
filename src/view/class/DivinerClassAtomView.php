@@ -20,10 +20,15 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
   protected function renderBody() {
     $atom = $this->getAtom();
     $renderer = $this->getRenderer();
-    return
-      $renderer->markupText($atom->getDocblockText()).
-      $this->renderTasks().
-      $this->renderMethods();
+
+    $renderer->pushContext($atom);
+      $result =
+        $renderer->markupText($atom->getDocblockText()).
+        $this->renderTasks().
+        $this->renderMethods();
+    $renderer->popContext($atom);
+
+    return $result;
   }
 
   protected function getAtomInfoDictionary() {
@@ -41,11 +46,11 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
 
     return parent::getAtomInfoDictionary() + $dict;
   }
-  
+
   protected function getDefinedTasks() {
     $metadata = $this->getAtom()->getDocblockMetadata();
     $tasks = idx($metadata, 'task');
-    
+
     $map = array();
     if ($tasks) {
       foreach (explode("\n", $tasks) as $task) {
@@ -56,10 +61,10 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
       }
     }
     $map['unspecified'] = 'Unspecified';
-    
+
     return $map;
   }
-  
+
   protected function renderTasks() {
     $atom = $this->getAtom();
     $renderer = $this->getRenderer();
@@ -88,7 +93,7 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
       }
       $out[] = '</ul>';
     }
-    
+
     return
       '<h2>Tasks</h2>'.
       '<div class="atom-task-list">'.
