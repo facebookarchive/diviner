@@ -157,7 +157,7 @@ div.doc {
 div.atom-doc {
   width: 60em;
 }
-  
+
 
 .atom-index ul {
   margin-left: 2em;
@@ -201,6 +201,19 @@ a.atom-symbol {
   margin: 1em 0 1em 3em;
 }
 
+.doc-markup tt {
+  color: #333333;
+  background: #ebebeb;
+  padding: 0 .25em;
+}
+
+.doc-markup .remarkup-note {
+  margin: 1em 1.5em;
+  padding: 0.5em 1em;
+  border: 1px solid #ddddff;
+  background: #f3f3ff;
+}
+
 .atom-type {
   float: right;
   color: #888888;
@@ -215,13 +228,13 @@ a.atom-symbol {
 .atom-return-type {
   color: #888888;
   font-weight: normal;
-}  
+}
 
 .atom-parameters {
   color: #444444;
   font-weight: normal;
 }
-  
+
 
 table.atom-info {
   border: 1px solid #aaaaaa;
