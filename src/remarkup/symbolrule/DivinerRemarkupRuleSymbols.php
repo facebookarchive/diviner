@@ -42,7 +42,7 @@ class DivinerRemarkupRuleSymbols
     $name = $matches[2];
 
     // Collapse sequences of whitespace into a single space.
-    $name = preg_replace('/\s{2,}/', ' ', $name);
+    $name = preg_replace('/\s+/', ' ', $name);
 
     $project = null;
     if (strpos($type, '@') !== false) {
