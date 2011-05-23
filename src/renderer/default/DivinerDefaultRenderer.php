@@ -274,7 +274,9 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $type,
     $name,
     $link_text = null,
-    $anchor = null) {
+    $anchor = null,
+    $project = null) {
+
     if ($link_text === null) {
       $link_text = phutil_escape_html($name);
     }
@@ -285,6 +287,10 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $name = $this->getNormalizedName($name);
     if ($anchor) {
       $anchor = '#'.$this->getNormalizedName($anchor);
+    }
+
+    if ($project) {
+      $base .= "../{$project}/";
     }
 
     return phutil_render_tag(

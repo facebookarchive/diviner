@@ -32,7 +32,7 @@ class DivinerRemarkupRuleSymbols
 
   public function apply($text) {
     return preg_replace_callback(
-      '/@{(\w+?):([^}]+?)}/',
+      '/@{([\w@]+?):([^}]+?)}/',
       array($this, 'markupSymbol'),
       $text);
   }
@@ -40,6 +40,14 @@ class DivinerRemarkupRuleSymbols
   public function markupSymbol($matches) {
     $type = $matches[1];
     $name = $matches[2];
+
+    // Collapse sequences of whitespace into a single space.
+    $name = preg_replace('/\s{2,}/', ' ', $name);
+
+    $project = null;
+    if (strpos($type, '@') !== false) {
+      list($type, $project) = explode('@', $type, 2);
+    }
 
     switch ($type) {
       case 'method':
@@ -59,7 +67,8 @@ class DivinerRemarkupRuleSymbols
             $type,
             $class,
             phutil_escape_html($name).$suffix,
-            'method/'.$method));
+            'method/'.$method,
+            $project));
       case 'function':
         $suffix = '()';
         break;
@@ -72,7 +81,9 @@ class DivinerRemarkupRuleSymbols
       $this->getRenderer()->renderAtomLinkRaw(
         $type,
         $name,
-        phutil_escape_html($name).$suffix));
+        phutil_escape_html($name).$suffix,
+        $anchor = null,
+        $project));
   }
 
 }
