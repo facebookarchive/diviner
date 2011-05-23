@@ -81,8 +81,8 @@ class DivinerXHPEngine extends DivinerEngine {
       $atoms[] = $atom;
     }
 
-    $class_decl = $tree->selectDescendantsOfType('n_CLASS_DECLARATION');
-    foreach ($class_decl as $class) {
+    $class_decls = $tree->selectDescendantsOfType('n_CLASS_DECLARATION');
+    foreach ($class_decls as $class) {
       $name = $class->getChildByIndex(1);
 
       $atom = new DivinerClassAtom();
@@ -98,7 +98,7 @@ class DivinerXHPEngine extends DivinerEngine {
 
       $this->findAtomDocblock($atom, $class);
 
-      $methods = $class_decl->selectDescendantsOfType('n_METHOD_DECLARATION');
+      $methods = $class->selectDescendantsOfType('n_METHOD_DECLARATION');
       foreach ($methods as $method) {
         $matom = new DivinerMethodAtom();
         $this->findAtomDocblock($matom, $method);
