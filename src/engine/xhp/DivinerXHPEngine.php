@@ -122,7 +122,13 @@ class DivinerXHPEngine extends DivinerEngine {
         $matom->setFile($file);
         $matom->setLine($method->getLineNumber());
 
-        $this->parseReturnType($matom, $method);
+        if ($matom->getName() == '__construct') {
+          $matom->setReturnTypeAttributes(array(
+            'doctype' => 'this',
+          ));
+        } else {
+          $this->parseReturnType($matom, $method);
+        }
         $atom->addMethod($matom);
       }
 

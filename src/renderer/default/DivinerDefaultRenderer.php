@@ -139,6 +139,8 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     if (empty($this->engine)) {
       $engine = new PhutilRemarkupEngine();
 
+      $engine->setConfig('pygments.enabled', true);
+
       $rules = array();
       $rules[] = new PhutilRemarkupRuleEscapeRemarkup();
       $rules[] = new PhutilRemarkupRuleHyperlink();
@@ -154,6 +156,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $code_rules[] = new PhutilRemarkupRuleEscapeHTML();
 
       $blocks = array();
+      $blocks[] = new PhutilRemarkupEngineRemarkupQuotesBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupHeaderBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupNoteBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupListBlockRule();

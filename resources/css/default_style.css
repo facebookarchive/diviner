@@ -214,6 +214,14 @@ a.atom-symbol {
   background: #f3f3ff;
 }
 
+.doc-markup blockquote {
+  border-left: 1px solid #AAAAAA;
+  color:       #333333;
+  font-style:  italic;
+  margin:      .5em 0em;
+  padding:     .25em 1em;
+}
+
 .atom-type {
   float: right;
   color: #888888;
