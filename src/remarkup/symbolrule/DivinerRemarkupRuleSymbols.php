@@ -54,6 +54,10 @@ class DivinerRemarkupRuleSymbols
         $context = $this->getEngine()->getConfig('diviner.context');
         if (strpos($name, '::') !== false) {
           list($class, $method) = explode('::', $name);
+        } else if (strpos($name, '.') !== false) {
+          $parts = explode('.', $name);
+          $method = array_pop($parts);
+          $class = implode('.', $parts);
         } else if ($context) {
           $method = $name;
           $class = $context->getName();

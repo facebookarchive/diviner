@@ -53,7 +53,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
           array(
             'class' => 'atom-parameter-type',
           ),
-          phutil_escape_html($type.' '));
+          $this->getInlineMarkupEngine()->markupText($type).' ');
       }
       $default = idx($dict, 'default');
       if (strlen($default)) {
@@ -87,7 +87,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       array(
         'class' => 'atom-return-type',
       ),
-      phutil_escape_html($type));
+      $this->getInlineMarkupEngine()->markupText($type));
   }
 
   public function renderUndocumented($type) {
@@ -109,7 +109,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     return
       '<div class="doc-markup">'.
         $this->getMarkupEngine()->markupText($text).
-      '</div>';;
+      '</div>';
   }
 
   public function markupTextInline($text) {
@@ -177,6 +177,12 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     }
 
     $this->engine->setConfig('diviner.context', $this->peekContext());
+
+    if ($this->peekContext()) {
+      $this->engine->setConfig(
+        'phutil.codeblock.language-default',
+        $this->peekContext()->getLanguage());
+    }
 
     return $this->engine;
   }
@@ -327,7 +333,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $table[] =
         '<tr>'.
           '<td class="atom-param-table-group">'.$param_header.'</td>'.
-          '<td class="atom-param-type">'.phutil_escape_html($type).'</td>'.
+          '<td class="atom-param-type">'.$this->markupTextInline($type).'</td>'.
           '<td class="atom-param-name">'.phutil_escape_html($param).'</td>'.
           '<td>'.$this->markupTextInline($docs).'</td>'.
         '</tr>';
@@ -344,7 +350,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $table[] =
         '<tr class="atom-param-table-return">'.
           '<td class="atom-param-table-group">return</td>'.
-          '<td class="atom-param-type">'.phutil_escape_html($type).'</td>'.
+          '<td class="atom-param-type">'.$this->markupTextInline($type).'</td>'.
           '<td class="atom-param-name"></td>'.
           '<td>'.$this->markupTextInline($docs).'</td>'.
         '</tr>';

@@ -45,6 +45,7 @@ abstract class DivinerAtom {
   private $docblockText;
   private $docblockMetadata;
   private $attributes = array();
+  private $language;
 
   abstract public function getType();
   abstract public function getIsTopLevelAtom();
@@ -109,6 +110,15 @@ abstract class DivinerAtom {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function setLanguage($language) {
+    $this->language = $language;
+    return $this;
+  }
+
+  public function getLanguage() {
+    return $this->language;
   }
 
   public function setRawDocblock($raw_docblock) {
