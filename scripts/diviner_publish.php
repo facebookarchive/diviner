@@ -29,6 +29,7 @@ $trace = false;
 
 phutil_require_module('phutil', 'future/exec');
 phutil_require_module('phutil', 'symbols');
+PhutilErrorHandler::initialize();
 
 $args = array_values($args);
 $alen = count($args);
