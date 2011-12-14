@@ -159,7 +159,7 @@ class DivinerXHPEngine extends DivinerEngine {
     }
   }
 
-  private function parseParams(DivinerAtom $atom, XHPASTNodeList $params) {
+  private function parseParams(DivinerAtom $atom, AASTNodeList $params) {
     $metadata = $atom->getDocblockMetadata();
     $docs = idx($metadata, 'param', '');
     if ($docs) {
