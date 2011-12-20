@@ -140,6 +140,12 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $engine = new PhutilRemarkupEngine();
 
       $engine->setConfig('pygments.enabled', true);
+      $engine->setConfig(
+        'uri.allowed-protocols',
+        array(
+          'http'  => true,
+          'https' => true,
+        ));
 
       $rules = array();
       $rules[] = new PhutilRemarkupRuleEscapeRemarkup();
