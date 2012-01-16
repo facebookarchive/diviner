@@ -72,6 +72,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: .25em;
   margin-bottom: .25em;
   line-height:    1.6em;
+  clear: right;
 }
 
 h1 {
@@ -177,23 +178,6 @@ a.atom-symbol {
 
 .doc-markup p {
   margin: 1em 0;
-}
-
-.doc-markup code {
-  background: #fdfae7;
-  border: 1px solid #f5e178;
-  display: block;
-  white-space: pre;
-  font-family: "Monaco", monospace;
-  font-size: 10px;
-  color: #000000;
-  margin: 1em 2em;
-  padding: .5em 1.5em;
-}
-
-.doc-markup code.remarkup-counterexample {
-  border: 1px solid #aa0000;
-  background-color: #ffaaaa;
 }
 
 .doc-markup ul {
@@ -337,3 +321,66 @@ table.atom-info td {
   font-weight: bold;
   font-size: 14px;
 }
+
+
+.doc-markup .remarkup-code-block {
+  margin: 1em 2em;
+  white-space: pre;
+  font-family: "Monaco", monospace;
+  font-size: 10px;
+}
+
+.doc-markup .remarkup-code-header {
+  padding: .25em 1em;
+  background: #edead7;
+  color: #444444;
+}
+
+.doc-markup .remarkup-code-block code {
+  background: #fdfae7;
+  border: 1px solid #f5e178;
+  display: block;
+  color: #000000;
+  overflow: auto;
+  padding: .5em 1em;
+  font-family: "Monaco", monospace;
+}
+
+.doc-markup code.remarkup-counterexample {
+  border: 1px solid #aa0000;
+  background-color: #ffaaaa;
+}
+
+.doc-markup-toc {
+  float: right;
+  border: 1px solid #999999;
+  background: #f9f9f9;
+  padding: 4px 12px;
+  width: 320px;
+  font-size: 11px;
+  line-height: 1.4em;
+  white-space: nowrap;
+}
+
+.doc-markup-toc-header {
+  color: #444444;
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 4px;
+}
+
+.doc-markup-toc ul {
+  padding: 0 0 0 0.25em;
+  margin: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.doc-markup-toc ul ul {
+  margin-left: 1.25em;
+}
+
+.doc-markup-toc ul li {
+  padding: 0;
+  margin: 0;
+}
+

@@ -2,7 +2,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,11 +136,16 @@ foreach ($engines as $engine) {
         $atom->setFile($file);
         $publisher->addAtoms(array($atom));
       } else {
-        $atoms = $engine->parseFile($file, $data);
-
-        Filesystem::writeFile($cache_loc[$file], serialize($atoms));
-
-        $publisher->addAtoms($atoms);
+        try {
+          $atoms = $engine->parseFile($file, $data);
+          Filesystem::writeFile($cache_loc[$file], serialize($atoms));
+          $publisher->addAtoms($atoms);
+        } catch (Exception $ex) {
+          $atom = new DivinerFileAtom();
+          $atom->setName($file);
+          $atom->setFile($file);
+          $publisher->addAtoms(array($atom));
+        }
       }
     }
     echo ".";

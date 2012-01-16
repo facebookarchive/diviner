@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,10 +105,30 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     return '<table class="atom-info">'.implode("\n", $rows).'</table>';
   }
 
-  public function markupText($text) {
+  public function markupText($text, array $options = array()) {
+
+    $engine = $this->getMarkupEngine();
+    $text = $engine->markupText($text);
+
+    $toc = null;
+    if (!empty($options['toc'])) {
+      $toc = PhutilRemarkupEngineRemarkupHeaderBlockRule::renderTableOfContents(
+        $engine);
+      if ($toc) {
+        $toc =
+          '<div class="doc-markup-toc">'.
+            '<div class="doc-markup-toc-header">'.
+              'Table of Contents'.
+            '</div>'.
+            $toc.
+          '</div>';
+      }
+    }
+
     return
       '<div class="doc-markup">'.
-        $this->getMarkupEngine()->markupText($text).
+        $toc.
+        $text.
       '</div>';
   }
 
@@ -146,6 +166,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
           'http'  => true,
           'https' => true,
         ));
+      $engine->setConfig('header.generate-toc', true);
 
       $rules = array();
       $rules[] = new PhutilRemarkupRuleEscapeRemarkup();

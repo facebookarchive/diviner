@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,19 +49,28 @@ class DivinerXHPEngine extends DivinerEngine {
     }
 
     foreach (Futures($futures)->limit(8) as $file => $future) {
-      $this->trees[$file] = XHPASTTree::newFromDataAndResolvedExecFuture(
-        $file_map[$file],
-        $future->resolve());
+      try {
+        $this->trees[$file] = XHPASTTree::newFromDataAndResolvedExecFuture(
+          $file_map[$file],
+          $future->resolve());
+      } catch (Exception $ex) {
+        $this->trees[$file] = $ex;
+      }
     }
   }
 
   public function parseFile($file, $data) {
 
-    $tree = $this->trees[$file]->getRootNode();
+    $tree = $this->trees[$file];
+    if ($tree instanceof Exception) {
+      throw $tree;
+    }
+
+    $root = $tree->getRootNode();
 
     $atoms = array();
 
-    $func_decl = $tree->selectDescendantsOfType('n_FUNCTION_DECLARATION');
+    $func_decl = $root->selectDescendantsOfType('n_FUNCTION_DECLARATION');
     foreach ($func_decl as $func) {
       $name = $func->getChildByIndex(2);
 
@@ -81,7 +90,7 @@ class DivinerXHPEngine extends DivinerEngine {
       $atoms[] = $atom;
     }
 
-    $class_decls = $tree->selectDescendantsOfType('n_CLASS_DECLARATION');
+    $class_decls = $root->selectDescendantsOfType('n_CLASS_DECLARATION');
     foreach ($class_decls as $class) {
       $name = $class->getChildByIndex(1);
 
