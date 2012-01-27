@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
 
     $renderer->pushContext($atom);
       $result =
+        $this->renderAttributes().
         $renderer->markupText($atom->getDocblockText()).
         $this->renderTasks().
         $this->renderMethods();
@@ -99,6 +100,21 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
       '<div class="atom-task-list">'.
         implode("\n", $out).
       '</div>';
+  }
+
+  protected function renderAttributes() {
+    $atom = $this->getAtom();
+    $renderer = $this->getRenderer();
+    $metadata = $atom->getDocblockMetadata();
+
+    $attributes = array();
+    if (idx($metadata, 'stable') !== null) {
+      $attributes[] = $renderer->renderAttributeNotice(
+        'stable',
+        'This class is stable: you may safely extend it.');
+    }
+
+    return implode("\n", $attributes);
   }
 
   protected function renderMethods() {

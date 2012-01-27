@@ -77,17 +77,21 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 32px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #bbbbbb;
 }
 
 h2 {
   font-size: 24px;
   border-bottom: 1px solid #dddddd;
+  background: #f3f3f3;
+  padding: 0 .25em;
+  margin-top: 1em;
 }
 
 h3 {
   font-size: 18px;
   border-bottom: 1px solid #dddddd;
+  margin-top: 1em;
 }
 
 h4 {
@@ -231,8 +235,8 @@ a.atom-symbol {
 table.atom-info {
   border: 1px solid #aaaaaa;
   background: #efefef;
-  margin: .5em 3% 1em;
-  width: 94%;
+  margin: .5em 0 1em;
+  width: 100%;
 }
 
 table.atom-info th {
@@ -260,8 +264,8 @@ table.atom-info td {
 }
 
 .atom-param-table {
-  margin: .75em 3% 1em;
-  width: 94%;
+  margin: .75em 0 1em;
+  width: 100%;
   background: #f6fff3;
   border: 1px solid #88aa66;
 }
@@ -314,6 +318,12 @@ table.atom-info td {
 .atom-group-listing h1 {
   margin: 0 0 .25em 0;
   padding: 0;
+}
+
+.atom-attribute-stable {
+  padding: 1em;
+  border: 1px solid #aaffaa;
+  background: #efffef;
 }
 
 .atom-toc ul {

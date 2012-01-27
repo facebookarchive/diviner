@@ -414,4 +414,11 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       phutil_escape_html($file.':'.$line));
   }
 
+  public function renderAttributeNotice($type, $message) {
+    return
+      '<div class="atom-attribute-'.phutil_escape_html($type).'">'.
+        phutil_escape_html($message).
+      '</div>';
+  }
+
 }

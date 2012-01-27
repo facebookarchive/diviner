@@ -8,6 +8,7 @@
 
 phutil_require_module('diviner', 'view/base');
 
+phutil_require_module('phutil', 'markup');
 phutil_require_module('phutil', 'utils');
 
 
