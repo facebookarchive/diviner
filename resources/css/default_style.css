@@ -370,6 +370,7 @@ table.atom-info td {
   font-size: 11px;
   line-height: 1.4em;
   white-space: nowrap;
+  margin-bottom: 1em;
 }
 
 .doc-markup-toc-header {
