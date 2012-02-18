@@ -189,6 +189,18 @@ a.atom-symbol {
   margin: 1em 0 1em 3em;
 }
 
+.doc-markup ol {
+  list-style: decimal;
+  margin: 1em 0 1em 3em;
+}
+
+.doc-markup ul ol,
+.doc-markup ul ul,
+.doc-markup ol ol,
+.doc-markup ol ul {
+  margin: .25em 0 .25em 2em;
+}
+
 .doc-markup tt {
   color: #333333;
   background: #ebebeb;
