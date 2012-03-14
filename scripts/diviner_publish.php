@@ -21,48 +21,37 @@ require_once dirname(__FILE__).'/__init_script__.php';
 
 ini_set('memory_limit', -1);
 
-$args = array_slice($argv, 1);
+$args = new PhutilArgumentParser($argv);
+$args->setTagline('multilanguage documentation generator');
+$args->setSynopsis(<<<EOHELP
+    **diviner** [__options__] __source_directory__
+      Generate source documentation.
 
-$full_rebuild = false;
-$update_remote = false;
-$trace = false;
+EOHELP
+);
+$args->parseStandardArguments();
+$args->parse(
+  array(
+    array(
+      'name'      => 'clean',
+      'help'      => 'Ignore all caches.',
+    ),
+    array(
+      'name'      => 'more',
+      'wildcard'  => true,
+    ),
+  ));
 
-phutil_require_module('phutil', 'future/exec');
-phutil_require_module('phutil', 'symbols');
-PhutilErrorHandler::initialize();
+$full_rebuild = $args->getArg('clean');
 
-$args = array_values($args);
-$alen = count($args);
-for ($ii = 0; $ii < $alen; $ii++) {
-  $arg = $args[$ii];
-  if ($arg == '--') {
-    unset($args[$ii]);
-    break;
-  } else if ($arg == '--no-cache') {
-    $full_rebuild = true;
-  } else if ($arg == '--publish') {
-    $update_remote = true;
-  } else if ($arg == '--trace') {
-    $config_trace_mode = true;
-    ExecFuture::pushEchoMode(true);
-  } else {
-    continue;
-  }
-  unset($args[$ii]);
+$more = $args->getArg('more');
+if (count($more) !== 1) {
+  $args->printHelpAndExit();
 }
-$args = array_values($args);
+$source_dir = head($more);
 
-if (count($args) != 1) {
-  $self = basename($argv[0]);
-  echo "usage: {$self} [--no-cache] [--publish] [--trace] project_directory\n";
-  exit(1);
-}
-
-phutil_require_module('diviner', 'configuration');
-phutil_require_module('diviner', 'publisher');
-
-$configuration = DivinerProjectConfiguration::newFromDirectory($args[0]);
-$root = Filesystem::resolvePath($args[0]);
+$configuration = DivinerProjectConfiguration::newFromDirectory($source_dir);
+$root = Filesystem::resolvePath($source_dir);
 
 foreach ($configuration->getConfig('phutil_libraries', array()) as $library) {
   if (Filesystem::pathExists($root.'/'.$library)) {
@@ -74,8 +63,6 @@ foreach ($configuration->getConfig('phutil_libraries', array()) as $library) {
 
 $publisher = new DivinerPublisher($configuration);
 
-$all_atoms = array();
-
 $engines = $configuration->buildEngines();
 
 if (!$engines) {
@@ -83,7 +70,7 @@ if (!$engines) {
     "No documentation engines are specified in your .divinerconfig.");
 }
 
-execx('mkdir -p %s', $root.'/.divinercache');
+Filesystem::createDirectory($root.'/.divinercache');
 
 foreach ($engines as $engine) {
   $engine_name = get_class($engine);
@@ -153,8 +140,18 @@ foreach ($engines as $engine) {
   echo "\n";
 }
 
+echo "Generating views...\n";
+
+$views = $publisher->publish();
+
+echo "Removing old documentation...\n";
+
+Filesystem::remove($root.'/docs/');
+
 echo "Publishing documentation...\n";
 
-$publisher->publish();
+$generator = new DivinerStaticGenerator();
+$generator->setProjectConfiguration($configuration);
+$generator->generateDocumentation($views);
 
 echo "Done.\n";

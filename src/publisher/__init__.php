@@ -7,7 +7,6 @@
 
 
 phutil_require_module('diviner', 'atoms/base');
-phutil_require_module('diviner', 'generator/static');
 phutil_require_module('diviner', 'view/article');
 phutil_require_module('diviner', 'view/class');
 phutil_require_module('diviner', 'view/function');
