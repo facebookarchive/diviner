@@ -224,6 +224,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $rules[] = new PhutilRemarkupRuleEscapeHTML();
       $rules[] = new PhutilRemarkupRuleBold();
       $rules[] = new PhutilRemarkupRuleItalic();
+      $rules[] = new PhutilRemarkupRuleDel();
 
       $blocks = array();
       $blocks[] = new PhutilRemarkupEngineRemarkupInlineBlockRule();
