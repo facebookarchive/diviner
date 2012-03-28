@@ -176,6 +176,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $rules[] = new PhutilRemarkupRuleEscapeHTML();
       $rules[] = new PhutilRemarkupRuleBold();
       $rules[] = new PhutilRemarkupRuleItalic();
+      $rules[] = new PhutilRemarkupRuleDel();
 
       $code_rules = array();
       $code_rules[] = new PhutilRemarkupRuleEscapeRemarkup();
