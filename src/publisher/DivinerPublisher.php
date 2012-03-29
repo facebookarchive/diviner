@@ -47,6 +47,7 @@ final class DivinerPublisher {
   }
 
   private static function flattenAndGroupAtoms(array $atoms) {
+    assert_instances_of($atoms, 'DivinerAtom');
     $atoms = self::flattenAtoms($atoms);
     $atoms = self::selectTopLevelAtoms($atoms);
     $atoms = mgroup($atoms, 'getType');
@@ -54,6 +55,7 @@ final class DivinerPublisher {
   }
 
   private static function flattenAtoms(array $atoms) {
+    assert_instances_of($atoms, 'DivinerAtom');
     $all_atoms = array();
     foreach ($atoms as $atom) {
       $all_atoms[] = array($atom);
@@ -67,6 +69,7 @@ final class DivinerPublisher {
   }
 
   private static function selectTopLevelAtoms(array $atoms) {
+    assert_instances_of($atoms, 'DivinerAtom');
     $result = array();
     foreach ($atoms as $atom) {
       if ($atom->getIsTopLevelAtom()) {

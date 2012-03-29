@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 class DivinerStaticGenerator extends DivinerBaseGenerator {
 
   public function generateDocumentation(array $views) {
+    assert_instances_of($views, 'DivinerBaseAtomView');
 
     $renderer = new DivinerDefaultRenderer();
     $this->setRenderer($renderer);
@@ -61,11 +62,11 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
       unset($groups['radicals']);
       $groups['radicals'] = $radicals;
     }
-    
+
     $groups = array_select_keys(
       $groups,
       array_keys($configuration->getConfig('groups', array()))) + $groups;
-    
+
     $renderer->setBaseURI('');
     $index = array();
     $index[] = $this->renderTableOfContents($groups);
@@ -109,10 +110,10 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
         Filesystem::readFile($stylesheet));
     }
   }
-  
+
   private function renderTableOfContents($groups) {
     $renderer = $this->getRenderer();
-    
+
     $out = array();
     foreach ($groups as $name => $group) {
       $link = phutil_render_tag(
@@ -123,15 +124,15 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
         $renderer->renderGroup($name));
       $out[] = '<li>'.$link.'</li>';
     }
-    
+
     return
       '<div class="atom-toc">'.
         '<h1>Table of Contents</h1>'.
         '<ul>'.implode("\n", $out).'</ul>'.
       '</div>';
-    
+
   }
-  
+
   private function renderGroup($group) {
     $renderer = $this->getRenderer();
 
@@ -139,7 +140,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
     foreach ($group as $view) {
       $types[$view->getAtom()->getType()][] = $view;
     }
-    
+
     // Reorder the types.
     $types = array_select_keys(
       $types,
@@ -163,13 +164,13 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
       }
       if ($type == 'class') {
         $map = array(-1 => array());
-        
+
         $local = array();
         foreach ($views as $view) {
           $atom = $view->getAtom();
           $local[$atom->getName()] = true;
         }
-        
+
         foreach ($views as $view) {
           $atom = $view->getAtom();
           $extends = $atom->getParentClasses();
@@ -205,13 +206,13 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
         ),
         implode("\n", $list));
     }
-    
+
     return
       '<div class="atom-group-contents">'.
         implode("\n", $index).
       '</div>';
-  }  
-  
+  }
+
   private function renderView(DivinerBaseAtomView $view) {
 
     $html = $view->renderView();
@@ -270,6 +271,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
   }
 
   private function renderClassHierarchy(array $map, array $list) {
+    assert_instances_of($list, 'DivinerBaseAtomView');
     $renderer = $this->getRenderer();
 
     $out = array();
