@@ -94,7 +94,7 @@ foreach ($engines as $engine) {
       $files[$file].'.'.
       $engine_name;
 
-    if (Filesystem::pathExists($cache_loc[$file])) {
+    if (!$full_rebuild && Filesystem::pathExists($cache_loc[$file])) {
       $data = Filesystem::readFile($cache_loc[$file]);
       $atoms = unserialize($data);
       if ($atoms) {
@@ -107,8 +107,10 @@ foreach ($engines as $engine) {
       Filesystem::resolvePath($file, $root));
   }
 
-  $n = number_format(count($files) - count($file_map) - $skipped);
-  echo "[{$engine_name}] Found {$n} files in cache...\n";
+  if (!$full_rebuild) {
+    $n = number_format(count($files) - count($file_map) - $skipped);
+    echo "[{$engine_name}] Found {$n} files in cache...\n";
+  }
 
   $n = number_format(count($file_map));
   echo "[{$engine_name}] Parsing documentation for {$n} files...";
