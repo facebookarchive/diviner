@@ -137,9 +137,8 @@ class DivinerDefaultRenderer extends DivinerRenderer {
   }
 
   public function getNormalizedName($name) {
-    // TODO: We should encode any weird characters so they become valid
-    // in filesystem paths and URIs.
-    $name = str_replace(' ', '_', $name);
+    $name = preg_replace('#[\\\\ *:?|/_]+#', '_', $name);
+    $name = rtrim($name, '_');
     return $name;
   }
 
