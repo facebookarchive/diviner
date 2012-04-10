@@ -3,6 +3,16 @@
 Diviner is a documentation generation system which "supports" multiple
 languages.
 
+= Configuration =
+
+Valid configuration directives in `.divinerconfig`:
+
+- `name`
+- `src_link` - `%f` stands for file, `%l` for line, `%%` for %
+- `groups`
+- `engines`
+- `phutil_libraries`
+
 = header =
 
 == h3 ==

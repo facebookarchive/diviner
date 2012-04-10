@@ -1,5 +1,7 @@
 {
   "name" : "Diviner",
+  "src_link" :
+    "https://secure.phabricator.com/diffusion/DIV/browse/master/%f$%l",
   "engines" : [
     ["DivinerArticleEngine", {}],
     ["DivinerXHPEngine", {}]

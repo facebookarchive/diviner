@@ -402,16 +402,20 @@ class DivinerDefaultRenderer extends DivinerRenderer {
 
   public function renderFileAndLine($file, $line) {
 
-    $src_base = $this->getProjectConfiguration()->getConfig('src_base');
-    if (!$src_base) {
+    $src_link = $this->getProjectConfiguration()->getConfig('src_link');
+    if (!$src_link) {
       return phutil_escape_html($file.':'.$line);
     }
 
     return phutil_render_tag(
       'a',
       array(
-        'href'    => $src_base.'/'.$file.'#L'.$line,
-        'target'  => 'blank',
+        'href' => strtr($src_link, array(
+          '%%' => '%',
+          '%f' => phutil_escape_uri($file),
+          '%l' => phutil_escape_uri($line),
+        )),
+        'target' => 'blank',
       ),
       phutil_escape_html($file.':'.$line));
   }
