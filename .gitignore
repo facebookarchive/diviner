@@ -1,4 +1,5 @@
 .DS_Store
 ._*
 /docs/
+/src/.phutil_module_cache
 /.divinercache
