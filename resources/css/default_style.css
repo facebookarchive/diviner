@@ -368,7 +368,7 @@ table.atom-info td {
   font-family: "Monaco", monospace;
 }
 
-.doc-markup code.remarkup-counterexample {
+.doc-markup pre.remarkup-counterexample {
   border: 1px solid #aa0000;
   background-color: #ffaaaa;
 }
