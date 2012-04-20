@@ -260,16 +260,13 @@ class DivinerDefaultRenderer extends DivinerRenderer {
 
     $type = $atom->getType();
     $name = $atom->getName();
-
-    $type = $this->getNormalizedName($type);
-    $name = $this->getNormalizedName($name);
     $anchor_name = $type.'/'.$name;
     $link_text = phutil_escape_html($atom->getName().$suffix);
 
     return phutil_render_tag(
       'a',
       array(
-        'href'  => '#'.$anchor_name,
+        'href'  => '#'.$this->getNormalizedName($anchor_name),
         'class' => 'atom-symbol',
       ),
       $link_text);
@@ -293,15 +290,12 @@ class DivinerDefaultRenderer extends DivinerRenderer {
   public function renderAtomAnchorTarget(DivinerAtom $atom) {
     $type = $atom->getType();
     $name = $atom->getName();
-
-    $type = $this->getNormalizedName($type);
-    $name = $this->getNormalizedName($name);
     $anchor_name = $type.'/'.$name;
 
     return phutil_render_tag(
       'a',
       array(
-        'name' => $anchor_name,
+        'name' => $this->getNormalizedName($anchor_name),
       ),
       '');
   }
