@@ -184,16 +184,19 @@ class DivinerXHPEngine extends DivinerEngine {
       if ($docs) {
         $doc = array_shift($docs);
         if ($doc) {
-          $split = preg_split('/\s+/', trim($doc), $limit = 2);
-          if (!empty($split[0])) {
-            $dict['doctype'] = $split[0];
-          }
-          if (!empty($split[1])) {
-            $dict['docs'] = $split[1];
-          }
+          $dict += $this->parseParamDoc($doc);
         }
       }
       $atom->addParameter($name->getConcreteString(), $dict);
+    }
+
+    // Add extra parameters retrieved by func_get_args().
+    if ($docs) {
+      foreach ($docs as $doc) {
+        if ($doc) {
+          $atom->addParameter('', $this->parseParamDoc($doc));
+        }
+      }
     }
   }
 

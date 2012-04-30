@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,18 @@ abstract class DivinerEngine {
 
   final public function getEngineConfiguration($key, $default = null) {
     return idx($this->engineConfig, $key, $default);
+  }
+
+  protected function parseParamDoc($doc) {
+    $dict = array();
+    $split = preg_split('/\s+/', trim($doc), $limit = 2);
+    if (!empty($split[0])) {
+      $dict['doctype'] = $split[0];
+    }
+    if (!empty($split[1])) {
+      $dict['docs'] = $split[1];
+    }
+    return $dict;
   }
 
 }
