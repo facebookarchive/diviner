@@ -151,7 +151,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
   }
 
   public function getTypeDisplayNamePlural($type) {
-    return $this->getTypeDisplayName().'s';
+    return $this->getTypeDisplayName($type).'s';
   }
 
   protected function getMarkupEngine() {
