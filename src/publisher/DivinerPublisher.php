@@ -61,11 +61,7 @@ final class DivinerPublisher {
       $all_atoms[] = array($atom);
       $all_atoms[] = $atom->getAllChildren();
     }
-    if ($all_atoms) {
-      return call_user_func_array('array_merge', $all_atoms);
-    } else {
-      return array();
-    }
+    return array_mergev($all_atoms);
   }
 
   private static function selectTopLevelAtoms(array $atoms) {
