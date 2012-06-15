@@ -3,3 +3,6 @@
 /docs/
 /src/.phutil_module_cache
 /.divinercache
+
+# Arcanist scratch directory
+/.arc
