@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,12 @@
  */
 abstract class DivinerAtom {
 
-  const TYPE_FUNCTION = 'function';
-  const TYPE_CLASS    = 'class';
-  const TYPE_FILE     = 'file';
-  const TYPE_ARTICLE  = 'article';
-  const TYPE_METHOD   = 'method';
+  const TYPE_FUNCTION  = 'function';
+  const TYPE_CLASS     = 'class';
+  const TYPE_INTERFACE = 'interface';
+  const TYPE_FILE      = 'file';
+  const TYPE_ARTICLE   = 'article';
+  const TYPE_METHOD    = 'method';
 
   private $file;
   private $line;

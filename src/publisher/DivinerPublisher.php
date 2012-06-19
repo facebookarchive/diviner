@@ -107,6 +107,7 @@ final class DivinerPublisher {
     foreach ($atoms as $atom) {
       switch ($atom->getType()) {
         case DivinerAtom::TYPE_CLASS:
+        case DivinerAtom::TYPE_INTERFACE:
           $view = new DivinerClassAtomView($atom);
           break;
         case DivinerAtom::TYPE_ARTICLE:
