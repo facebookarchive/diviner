@@ -407,3 +407,20 @@ table.atom-info td {
   margin: 0;
 }
 
+table.remarkup-table {
+  border-collapse:  separate;
+  border-spacing:   1px;
+  background:       #d3d3d3;
+  margin:           1em;
+}
+
+table.remarkup-table th {
+  font-weight: bold;
+  padding: 3px 6px;
+  background: #e3e3e3;
+}
+
+table.remarkup-table td {
+  background: #ffffff;
+  padding: 3px 6px;
+}

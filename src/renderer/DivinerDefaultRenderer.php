@@ -188,6 +188,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $blocks[] = new PhutilRemarkupEngineRemarkupNoteBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupListBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupCodeBlockRule();
+      $blocks[] = new PhutilRemarkupEngineRemarkupTableBlockRule();
       $blocks[] = new PhutilRemarkupEngineRemarkupDefaultBlockRule();
 
       foreach ($blocks as $block) {
