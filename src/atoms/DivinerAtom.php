@@ -22,10 +22,10 @@
  *
  * Each type documentable entity has a corresponding "atom" class, which stores
  * an abstract representation of parsed source code -- for instance,
- * @{class:DivinerClass} has information like parent classes and methods, while
- * @{class:DivinerFunction} has information like function parameters. All atoms
- * store common information, like the file where the atom is declared and the
- * associated docblock.
+ * @{class:DivinerClassAtom} has information like parent classes and methods,
+ * while @{class:DivinerFunctionAtom} has information like function parameters.
+ * All atoms store common information, like the file where the atom is declared
+ * and the associated docblock.
  */
 abstract class DivinerAtom {
 
