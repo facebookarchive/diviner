@@ -40,7 +40,9 @@ class DivinerClassAtomView extends DivinerBaseAtomView {
     if ($atom->getParentClasses()) {
       $extends = array();
       foreach ($atom->getParentClasses() as $class) {
-        $extends[] = $renderer->renderAtomLinkRaw('class', $class);
+        $extends[] = ($this->isKnownAtom(DivinerAtom::TYPE_CLASS, $class)
+          ? $renderer->renderAtomLinkRaw('class', $class)
+          : phutil_escape_html($class));
       }
       $dict['Extends'] = implode(', ', $extends);
     }

@@ -120,7 +120,7 @@ final class DivinerPublisher {
           continue 2;
       }
 
-      $views[] = $view;
+      $views[] = $view->setKnownAtoms($atoms);
     }
 
     return $views;

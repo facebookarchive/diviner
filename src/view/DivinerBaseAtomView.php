@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright 2011 Facebook, Inc.
+ * Copyright 2012 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,27 @@ abstract class DivinerBaseAtomView {
   protected $docblockText;
   protected $docblockMeta;
 
+  private $knownAtoms = array();
+
   final public function __construct(DivinerAtom $atom) {
     $this->atom = $atom;
   }
 
   final public function getAtom() {
     return $this->atom;
+  }
+
+  final public function setKnownAtoms(array $atoms) {
+    assert_instances_of($atoms, 'DivinerAtom');
+    $this->knownAtoms = array();
+    foreach ($atoms as $atom) {
+      $this->knownAtoms[$atom->getType()][$atom->getName()] = true;
+    }
+    return $this;
+  }
+
+  final protected function isKnownAtom($type, $name) {
+    return isset($this->knownAtoms[$type][$name]);
   }
 
   final public function setRenderer(DivinerRenderer $renderer) {
@@ -104,7 +119,7 @@ abstract class DivinerBaseAtomView {
     if ($group) {
       $dict['Group'] = $renderer->renderGroup($group);
     }
-    
+
     return $dict;
   }
 
