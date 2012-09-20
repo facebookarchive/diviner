@@ -102,6 +102,7 @@ final class DivinerPublisher {
     $atoms = self::flattenAtoms($atoms);
     $atoms = self::selectTopLevelAtoms($atoms);
 
+    $context = new DivinerViewContext($atoms);
     $views = array();
 
     foreach ($atoms as $atom) {
@@ -120,7 +121,7 @@ final class DivinerPublisher {
           continue 2;
       }
 
-      $views[] = $view->setKnownAtoms($atoms);
+      $views[] = $view->setContext($context);
     }
 
     return $views;

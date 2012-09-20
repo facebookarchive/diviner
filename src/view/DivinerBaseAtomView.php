@@ -19,11 +19,10 @@
 abstract class DivinerBaseAtomView {
 
   protected $atom;
+  protected $context;
   protected $renderer;
   protected $docblockText;
   protected $docblockMeta;
-
-  private $knownAtoms = array();
 
   final public function __construct(DivinerAtom $atom) {
     $this->atom = $atom;
@@ -33,17 +32,13 @@ abstract class DivinerBaseAtomView {
     return $this->atom;
   }
 
-  final public function setKnownAtoms(array $atoms) {
-    assert_instances_of($atoms, 'DivinerAtom');
-    $this->knownAtoms = array();
-    foreach ($atoms as $atom) {
-      $this->knownAtoms[$atom->getType()][$atom->getName()] = true;
-    }
+  final public function setContext(DivinerViewContext $context) {
+    $this->context = $context;
     return $this;
   }
 
   final protected function isKnownAtom($type, $name) {
-    return isset($this->knownAtoms[$type][$name]);
+    return $this->context->isKnownAtom($type, $name);
   }
 
   final public function setRenderer(DivinerRenderer $renderer) {

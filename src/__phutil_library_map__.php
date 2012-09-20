@@ -30,6 +30,7 @@ phutil_register_library_map(array(
     'DivinerRemarkupRuleSymbols' => 'remarkup/DivinerRemarkupRuleSymbols.php',
     'DivinerRenderer' => 'renderer/DivinerRenderer.php',
     'DivinerStaticGenerator' => 'generator/DivinerStaticGenerator.php',
+    'DivinerViewContext' => 'view/DivinerViewContext.php',
     'DivinerXHPEngine' => 'engine/DivinerXHPEngine.php',
   ),
   'function' =>
