@@ -1,2 +1,6 @@
 (Unstable!) Diviner is a multi-language documentation generator, used to
 generate libphutil documentation.
+
+LICENSE
+
+Diviner is released under the Apache 2.0 license except as otherwise noted.
