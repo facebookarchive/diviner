@@ -157,7 +157,6 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $rules[] = new PhutilRemarkupRuleDocumentLink();
       $rules[] = new PhutilRemarkupRuleHyperlink();
       $rules[] = $this->buildSymbolRule();
-      $rules[] = new PhutilRemarkupRuleEscapeHTML();
       $rules[] = new PhutilRemarkupRuleBold();
       $rules[] = new PhutilRemarkupRuleItalic();
       $rules[] = new PhutilRemarkupRuleDel();
@@ -166,7 +165,6 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $code_rules[] = new PhutilRemarkupRuleEscapeRemarkup();
       $code_rules[] = new PhutilRemarkupRuleDocumentLink();
       $code_rules[] = new PhutilRemarkupRuleHyperlink();
-      $code_rules[] = new PhutilRemarkupRuleEscapeHTML();
 
       $blocks = array();
       $blocks[] = new PhutilRemarkupEngineRemarkupQuotesBlockRule();
@@ -209,7 +207,6 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $rules[] = new PhutilRemarkupRuleEscapeRemarkup();
       $rules[] = new PhutilRemarkupRuleMonospace();
       $rules[] = $this->buildSymbolRule();
-      $rules[] = new PhutilRemarkupRuleEscapeHTML();
       $rules[] = new PhutilRemarkupRuleBold();
       $rules[] = new PhutilRemarkupRuleItalic();
       $rules[] = new PhutilRemarkupRuleDel();

@@ -9,6 +9,8 @@ if (!@constant('__LIBPHUTIL__')) {
   exit(1);
 }
 
+require_once 'libphutil/scripts/__init_script__.php';
+
 if (!ini_get('date.timezone')) {
   date_default_timezone_set('America/Los_Angeles');
 }
