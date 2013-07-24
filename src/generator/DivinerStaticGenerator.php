@@ -55,7 +55,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
     $index = array();
     $index[] = $this->renderTableOfContents($groups);
     foreach ($groups as $name => $group) {
-      $anchor = phutil_render_tag(
+      $anchor = phutil_tag(
         'a',
         array(
           'name' => $renderer->getNormalizedName($name),
@@ -100,7 +100,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
 
     $out = array();
     foreach ($groups as $name => $group) {
-      $link = phutil_render_tag(
+      $link = phutil_tag(
         'a',
         array(
           'href' => '#'.$renderer->getNormalizedName($name),
@@ -140,7 +140,7 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
       $views = array_values($ordered);
 
       if ($type != 'article') {
-        $index[] = phutil_render_tag(
+        $index[] = phutil_tag(
           'h3',
           array(
           ),
@@ -177,18 +177,18 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
         $list = array();
         foreach ($views as $view) {
           $excerpt = $this->renderExcerpt($view);
-          $list[] = phutil_render_tag(
-            'li',
-            array(),
-            $renderer->renderAtomLink($view->getAtom()).$excerpt);
+          $list[] = hsprintf(
+            '<li>%s%s</li>',
+            $renderer->renderAtomLink($view->getAtom()),
+            $excerpt);
         }
       }
-      $index[] = phutil_render_tag(
+      $index[] = phutil_tag(
         'ul',
         array(
           'class' => 'atom-index',
         ),
-        implode("\n", $list));
+        $list);
     }
 
     return
@@ -223,12 +223,12 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
     $configuration = $this->getProjectConfiguration();
 
     $crumbs = array();
-    $crumbs[] = phutil_render_tag(
+    $crumbs[] = phutil_tag(
       'a',
       array(
         'href' => $dictionary['ROOT'].'index.html',
       ),
-      phutil_escape_html($configuration->getProjectName()));
+      $configuration->getProjectName());
     if (!empty($dictionary['ATOM'])) {
       $crumbs[] = '<a href="#">'.$dictionary['ATOM'].'</a>';
     }
@@ -263,23 +263,19 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
       $atom = $view->getAtom();
       if (!empty($map[$atom->getName()])) {
         $content = $this->renderClassHierarchy($map, $map[$atom->getName()]);
-        $content = phutil_render_tag(
+        $content = phutil_tag(
           'ul',
           array(
           ),
-          implode("\n", $content));
+          $content);
       } else {
         $content = null;
       }
 
-      $excerpt = $this->renderExcerpt($view);
-
-      $content = $renderer->renderAtomLink($atom).$excerpt.$content;
-
-      $out[] = phutil_render_tag(
-        'li',
-        array(
-        ),
+      $out[] = hsprintf(
+        '<li>%s%s%s</li>',
+        $renderer->renderAtomLink($atom),
+        $this->renderExcerpt($view),
         $content);
     }
     return $out;
@@ -288,12 +284,9 @@ class DivinerStaticGenerator extends DivinerBaseGenerator {
   private function renderExcerpt(DivinerBaseAtomView $view) {
     $excerpt = $view->renderExcerpt();
     if ($excerpt) {
-      return phutil_render_tag(
-        'span',
-        array(
-          'class' => 'atom-excerpt',
-        ),
-        ' &mdash; '.$excerpt);
+      return hsprintf(
+        '<span class="atom-excerpt"> &mdash; %s</span>',
+        $excerpt);
     } else {
       return null;
     }

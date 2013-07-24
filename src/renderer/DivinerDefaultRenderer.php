@@ -15,12 +15,12 @@ class DivinerDefaultRenderer extends DivinerRenderer {
 
   public function renderAttributes($attributes) {
     foreach ($attributes as $key => $attribute) {
-      $attributes[$key] = phutil_render_tag(
+      $attributes[$key] = phutil_tag(
         'span',
         array(
           'class' => 'atom-attribute-'.$attribute,
         ),
-        phutil_escape_html($attribute));
+        $attribute);
     }
     return
       '<span class="atom-attributes">'.
@@ -32,28 +32,28 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     foreach ($parameters as $parameter => $dict) {
       $type = idx($dict, 'type');
       if ($type) {
-        $type = phutil_render_tag(
+        $type = phutil_tag(
           'span',
           array(
             'class' => 'atom-parameter-type',
           ),
-          $this->getInlineMarkupEngine()->markupText($type).' ');
+          hsprintf('%s ', $this->getInlineMarkupEngine()->markupText($type)));
       }
       $default = idx($dict, 'default');
       if (strlen($default)) {
-        $default = phutil_render_tag(
+        $default = phutil_tag(
           'span',
           array(
             'class' => 'atom-parameter-default',
           ),
-          phutil_escape_html(' = '.$default));
+          ' = '.$default);
       }
-      $name = phutil_render_tag(
+      $name = phutil_tag(
         'span',
         array(
           'class' => 'atom-parameter-name',
         ),
-        phutil_escape_html($parameter));
+        $parameter);
       $parameters[$parameter] = $type.$name.$default;
     }
     return
@@ -66,7 +66,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $type = nonempty(
       idx($attributes, 'type'),
       idx($attributes, 'doctype'));
-    return phutil_render_tag(
+    return phutil_tag(
       'span',
       array(
         'class' => 'atom-return-type',
@@ -99,21 +99,21 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $toc = PhutilRemarkupEngineRemarkupHeaderBlockRule::renderTableOfContents(
         $engine);
       if ($toc) {
-        $toc =
+        $toc = hsprintf(
           '<div class="doc-markup-toc">'.
             '<div class="doc-markup-toc-header">'.
               'Table of Contents'.
             '</div>'.
-            $toc.
-          '</div>';
+            '%s'.
+          '</div>',
+          $toc);
       }
     }
 
-    return
-      '<div class="doc-markup">'.
-        $toc.
-        $text.
-      '</div>';
+    return hsprintf(
+      '<div class="doc-markup">%s%s</div>',
+      $toc,
+      $text);
   }
 
   public function markupTextInline($text) {
@@ -246,15 +246,14 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $type = $atom->getType();
     $name = $atom->getName();
     $anchor_name = $type.'/'.$name;
-    $link_text = phutil_escape_html($atom->getName().$suffix);
 
-    return phutil_render_tag(
+    return phutil_tag(
       'a',
       array(
         'href'  => '#'.$this->getNormalizedName($anchor_name),
         'class' => 'atom-symbol',
       ),
-      $link_text);
+      $atom->getName().$suffix);
   }
 
   public function renderAtomLink(DivinerAtom $atom) {
@@ -269,7 +268,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     return $this->renderAtomLinkRaw(
       $atom->getType(),
       $atom->getName(),
-      phutil_escape_html($atom->getName().$suffix));
+      $atom->getName().$suffix);
   }
 
   public function renderAtomAnchorTarget(DivinerAtom $atom) {
@@ -277,7 +276,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $name = $atom->getName();
     $anchor_name = $type.'/'.$name;
 
-    return phutil_render_tag(
+    return phutil_tag(
       'a',
       array(
         'name' => $this->getNormalizedName($anchor_name),
@@ -294,7 +293,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
     $project = null) {
 
     if ($link_text === null) {
-      $link_text = phutil_escape_html($name);
+      $link_text = $name;
     }
 
     $base = $this->getBaseURI();
@@ -309,7 +308,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       $base .= "../{$project}/";
     }
 
-    return phutil_render_tag(
+    return phutil_tag(
       'a',
       array(
         'href'  => "{$base}{$type}/{$name}.html{$anchor}",
@@ -319,12 +318,12 @@ class DivinerDefaultRenderer extends DivinerRenderer {
   }
 
   public function renderType($type) {
-    return phutil_render_tag(
+    return phutil_tag(
       'span',
       array(
         'class' => 'atom-type',
       ),
-      phutil_escape_html($this->getTypeDisplayName($type)));
+      $this->getTypeDisplayName($type));
   }
 
   public function renderParameterTable(array $params, array $return) {
@@ -374,8 +373,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       'radicals' => 'Free Radicals',
     );
     $name = idx($map, $group, $group);
-    $name = phutil_escape_html($name);
-    return '<span class="atom-group">'.$name.'</span>';
+    return phutil_tag('span', array('class' => 'atom-group'), $name);
   }
 
   public function renderFileAndLine($file, $line) {
@@ -385,7 +383,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
       return phutil_escape_html($file.':'.$line);
     }
 
-    return phutil_render_tag(
+    return phutil_tag(
       'a',
       array(
         'href' => strtr($src_link, array(
@@ -395,7 +393,7 @@ class DivinerDefaultRenderer extends DivinerRenderer {
         )),
         'target' => 'blank',
       ),
-      phutil_escape_html($file.':'.$line));
+      $file.':'.$line);
   }
 
   public function renderAttributeNotice($type, $message) {

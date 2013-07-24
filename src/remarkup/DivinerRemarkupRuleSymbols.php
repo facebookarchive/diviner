@@ -51,13 +51,12 @@ class DivinerRemarkupRuleSymbols
         $suffix = '()';
         $type = 'class';
         return $this->getEngine()->storeText(
-          phutil_safe_html(
-            $this->getRenderer()->renderAtomLinkRaw(
-              $type,
-              $class,
-              $name.$suffix,
-              'method/'.$method,
-              $project)));
+          $this->getRenderer()->renderAtomLinkRaw(
+            $type,
+            $class,
+            $name.$suffix,
+            'method/'.$method,
+            $project));
       case 'function':
         $suffix = '()';
         break;
@@ -67,13 +66,12 @@ class DivinerRemarkupRuleSymbols
     }
 
     return $this->getEngine()->storeText(
-      phutil_safe_html(
-        $this->getRenderer()->renderAtomLinkRaw(
-          $type,
-          $name,
-          $name.$suffix,
-          $anchor = null,
-          $project)));
+      $this->getRenderer()->renderAtomLinkRaw(
+        $type,
+        $name,
+        $name.$suffix,
+        $anchor = null,
+        $project));
   }
 
 }

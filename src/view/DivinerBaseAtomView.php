@@ -55,7 +55,7 @@ abstract class DivinerBaseAtomView {
   public function renderView() {
     $renderer = $this->getRenderer();
 
-    $header = phutil_render_tag(
+    $header = phutil_tag(
       'h1',
       array(
         'class' => 'atom-name',
@@ -70,12 +70,12 @@ abstract class DivinerBaseAtomView {
       $info = null;
     }
 
-    return phutil_render_tag(
+    return phutil_tag(
       'div',
       array(
         'class' => 'atom-doc',
       ),
-      $header.$info.$body);
+      phutil_safe_html($header.$info.$body)); // TODO: This is cheating.
   }
 
   abstract protected function renderBody();
@@ -86,9 +86,9 @@ abstract class DivinerBaseAtomView {
 
     $type = $renderer->renderType($atom->getType());
 
-    $name = phutil_escape_html($atom->getName());
+    $name = $atom->getName();
 
-    return $type.' '.$name;
+    return hsprintf('%s %s', $type, $name);
   }
 
   protected function getAtomInfoDictionary() {
