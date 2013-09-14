@@ -28,8 +28,8 @@ class DivinerFunctionAtomView extends DivinerBaseAtomView {
     $atom = $this->getAtom();
     $renderer = $this->getRenderer();
     $type = $renderer->renderType($atom->getType());
-    $name = phutil_escape_html($atom->getName().'()');
-    return $type.' '.$name;
+    $name = $atom->getName().'()';
+    return hsprintf('%s %s', $type, $name);
   }
 
 
