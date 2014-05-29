@@ -1,6 +1,6 @@
-## Deprecated
-
-This repo is no longer developed or supported. Pull requests will be ignored.
+Archived Repo
+=============
+**This is an archived project and is no longer supported or updated by Facebook. Please do not file issues or pull-requests against this repo.**
 
 ## License
 
